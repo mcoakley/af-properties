@@ -1,0 +1,15 @@
+node_modules
+.nyc_output
+reports
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# VS Code
+.vscode/*
+
+# Crap files
+[Dd]esktop.ini
+.DS_Store
