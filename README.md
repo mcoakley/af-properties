@@ -2,7 +2,7 @@
 
 ## Status of Project
 
-[![Build Status](https://travis-ci.org/acmeframework/af-properties.svg?branch=master)](https://travis-ci.org/acmeframework/af-properties)[Coverage Status](https://coveralls.io/repos/github/acmeframework/af-properties/badge.svg?branch=master)](https://coveralls.io/github/acmeframework/af-properties?branch=master)
+[![Build Status](https://travis-ci.org/acmeframework/af-properties.svg?branch=master)](https://travis-ci.org/acmeframework/af-properties)[![Coverage Status](https://coveralls.io/repos/github/acmeframework/af-properties/badge.svg?branch=master)](https://coveralls.io/github/acmeframework/af-properties?branch=master)
 
 ## Note: v0.1.0
 
