@@ -88,8 +88,10 @@ class Property extends eventemitter3_1.EventEmitter {
         return this.validating;
     }
     normalize() {
-        if (this.normalized)
+        if (this.isNormalized()
+            || (this.isValid() && !this.options.normalizeIfValid)) {
             return;
+        }
         const previousValue = this.value;
         this.normalizers.forEach((normalizer) => {
             this.value = normalizer.normalize(this.value);
@@ -119,8 +121,8 @@ class Property extends eventemitter3_1.EventEmitter {
                 this.emitValidated(property_defs_1.PROPERTY_VALIDATION_CACHED_EVENT, this.valid);
                 return Promise.resolve(this.valid);
             }
-            this.validating = true;
             try {
+                this.validating = true;
                 if (this.options.normalizeBeforeValidate)
                     this.normalize();
                 return yield this._validate();
@@ -208,6 +210,9 @@ class Property extends eventemitter3_1.EventEmitter {
         if (!af_conditionals_1.isUsable.test(this.options.normalizeBeforeValidate)) {
             this.options.normalizeBeforeValidate =
                 property_defs_1.DEFAULT_NORMALIZE_BEFORE_VALIDATE;
+        }
+        if (!af_conditionals_1.isUsable.test(this.options.normalizeIfValid)) {
+            this.options.normalizeIfValid = property_defs_1.DEFAULT_NORMALIZE_IF_VALID;
         }
         if (!af_conditionals_1.isUsable.test(this.options.required)) {
             this.options.required = property_defs_1.DEFAULT_REQUIRED;

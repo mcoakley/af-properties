@@ -7,6 +7,7 @@ export interface PropertyOptions {
     name: string;
     normalizeAfterSet?: boolean;
     normalizeBeforeValidate?: boolean;
+    normalizeIfValid?: boolean;
     required?: boolean;
     stopValidationOnInvalid?: boolean;
     waitInterval?: number;
