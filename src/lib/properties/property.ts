@@ -4,7 +4,6 @@
  * @author Mike Coakley https://github.com/mcoakley
  * @version 0.1.0
  */
-
 import { isArray, isEmpty, isUsable } from "af-conditionals";
 import waitUntil from "async-wait-until";
 import { EventEmitter } from "eventemitter3";
@@ -15,6 +14,7 @@ import {
     DEFAULT_INVALID_IF_NOT_REQUIRED_AND_EMPTY,
     DEFAULT_NORMALIZE_AFTER_SET,
     DEFAULT_NORMALIZE_BEFORE_VALIDATE,
+    DEFAULT_NORMALIZE_IF_VALID,
     DEFAULT_PROPERTY_STOP_VALIDATION_ON_INVALID,
     DEFAULT_PROPERTY_WAIT_INTERVAL,
     DEFAULT_PROPERTY_WAIT_TIMEOUT,
@@ -24,9 +24,10 @@ import {
     PROPERTY_VALIDATION_EVENT,
     PROPERTY_VALUE_SET_EVENT,
     PropertyValidationEvent,
-    PropertyValueChangeEvent
+    PropertyValueChangeEvent,
 } from "./property-defs";
 import { RequiredValidator, Validator, ValidatorError } from "./validators";
+
 
 export interface PropertyOptions {
     displayName?: string;
@@ -34,6 +35,7 @@ export interface PropertyOptions {
     name: string;
     normalizeAfterSet?: boolean;
     normalizeBeforeValidate?: boolean;
+    normalizeIfValid?: boolean;
     required?: boolean;
     stopValidationOnInvalid?: boolean;
     waitInterval?: number;
@@ -188,7 +190,11 @@ export class Property
     }
 
     public normalize(): void {
-        if (this.normalized) return;
+        if (this.isNormalized()
+            || (this.isValid() && !this.options.normalizeIfValid)
+        ) {
+            return;
+        }
 
         const previousValue = this.value;
         this.normalizers.forEach((normalizer: Normalizer<T>) => {
@@ -221,10 +227,12 @@ export class Property
             this.emitValidated(PROPERTY_VALIDATION_CACHED_EVENT, this.valid);
             return Promise.resolve(this.valid);
         }
-        // Make sure we don't allow another call to isValid() while we are
-        // processing this isValid() run
-        this.validating = true;
+
         try {
+            // Make sure we don't allow another call to isValid() while we are
+            // processing this isValid() run
+            this.validating = true;
+
             if (this.options.normalizeBeforeValidate) this.normalize();
 
             return await this._validate();
@@ -267,7 +275,7 @@ export class Property
     protected initDefaultValidators(): void {
         this.validators = [];
 
-        // We always require the RequiredValidator
+        // We always require the RequiredValidator because...
         // 1. We now have a validator that can answer the isValueAllowed
         //    question
         // 2. The RequiredValidator is written to even handle when a
@@ -334,6 +342,9 @@ export class Property
         if (!isUsable.test(this.options.normalizeBeforeValidate)) {
             this.options.normalizeBeforeValidate =
                 DEFAULT_NORMALIZE_BEFORE_VALIDATE;
+        }
+        if (!isUsable.test(this.options.normalizeIfValid)) {
+            this.options.normalizeIfValid = DEFAULT_NORMALIZE_IF_VALID;
         }
         if (!isUsable.test(this.options.required)) {
             this.options.required = DEFAULT_REQUIRED;

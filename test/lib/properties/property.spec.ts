@@ -1,17 +1,14 @@
-import util = require("util");
-const setTimeoutPromise = util.promisify(setTimeout);
+import "mocha";
 
 import chai = require("chai");
 import chaiAsPromised = require("chai-as-promised");
-import "mocha";
-
-chai.use(chaiAsPromised);
-const expect = chai.expect;
+import util = require("util");
 
 import {
     DEFAULT_INVALID_IF_NOT_REQUIRED_AND_EMPTY,
     DEFAULT_NORMALIZE_AFTER_SET,
     DEFAULT_NORMALIZE_BEFORE_VALIDATE,
+    DEFAULT_NORMALIZE_IF_VALID,
     DEFAULT_PROPERTY_STOP_VALIDATION_ON_INVALID,
     DEFAULT_PROPERTY_WAIT_INTERVAL,
     DEFAULT_PROPERTY_WAIT_TIMEOUT,
@@ -25,6 +22,11 @@ import {
     Validator,
     ValidatorErrorCodes,
 } from "../../../src/lib";
+
+const setTimeoutPromise = util.promisify(setTimeout);
+
+chai.use(chaiAsPromised);
+const expect = chai.expect;
 
 // tslint:disable:no-unused-expression no-null-keyword
 
@@ -49,72 +51,72 @@ abstract class PropertyTester<T>
     }
 }
 
-class StringPropertyTester extends PropertyTester<string> {}
-class NumberPropertyTester extends PropertyTester<number> {}
-class BooleanPropertyTester extends PropertyTester<boolean> {}
+class StringPropertyTester extends PropertyTester<string> { }
+class NumberPropertyTester extends PropertyTester<number> { }
+class BooleanPropertyTester extends PropertyTester<boolean> { }
 
-describe("Property class", function() {
+describe("Property class", function () {
     const PROPERTY_NAME = "Test Property";
     const STRING_DATA = "Hello World";
 
-    describe("Test the static method getNextPropertyCount", function() {
+    describe("Test the static method getNextPropertyCount", function () {
         it("ensures that successive calls to getNexPropertyCount provides " +
             "sequential results",
-        function() {
-            let x = Property.getPropertyCount();
-            expect(Property.getNextPropertyCount()).to.equal(++x);
-            expect(Property.getNextPropertyCount()).to.equal(++x);
-            expect(Property.getNextPropertyCount()).to.equal(++x);
-        });
+            function () {
+                let x = Property.getPropertyCount();
+                expect(Property.getNextPropertyCount()).to.equal(++x);
+                expect(Property.getNextPropertyCount()).to.equal(++x);
+                expect(Property.getNextPropertyCount()).to.equal(++x);
+            });
     });
 
-    describe("Test the construction and options", function() {
-        it("throws an Error or a TypeError during construction", function() {
+    describe("Test the construction and options", function () {
+        it("throws an Error or a TypeError during construction", function () {
             // Data must not be undefined or NULL
-            expect(function() {
+            expect(function () {
                 // @ts-ignore
                 new StringPropertyTester(undefined, {
-                    name: PROPERTY_NAME, required:  true
+                    name: PROPERTY_NAME, required: true
                 });
             }).to.throw(Error);
 
-            expect(function() {
+            expect(function () {
                 // @ts-ignore
                 new StringPropertyTester(null, {
                     name: PROPERTY_NAME, required: true
                 });
             }).to.throw(Error);
 
-            expect(function() {
+            expect(function () {
                 // @ts-ignore
                 new StringPropertyTester(STRING_DATA, undefined);
             }).to.throw(TypeError);
 
-            expect(function() {
+            expect(function () {
                 // @ts-ignore
                 new StringPropertyTester(STRING_DATA, null);
             }).to.throw(TypeError);
 
-            expect(function() {
+            expect(function () {
                 new StringPropertyTester(STRING_DATA, { name: "" });
             }).to.throw(TypeError);
         });
 
         it("instantiates a valid Property object with customer normalizers " +
             "and validators",
-        function() {
-            const normalizers: Normalizer<string>[] = [
-                new StringNormalizer()
-            ];
-            const validators: Validator<string>[] = [
-                new StringValidator()
-            ];
-            expect(new StringPropertyTester(STRING_DATA,
-                { name: PROPERTY_NAME },
-                normalizers,
-                validators
-            )).to.be.an.instanceof(StringPropertyTester);
-        });
+            function () {
+                const normalizers: Normalizer<string>[] = [
+                    new StringNormalizer()
+                ];
+                const validators: Validator<string>[] = [
+                    new StringValidator()
+                ];
+                expect(new StringPropertyTester(STRING_DATA,
+                    { name: PROPERTY_NAME },
+                    normalizers,
+                    validators
+                )).to.be.an.instanceof(StringPropertyTester);
+            });
 
         function testPropertyOption(
             loadOptions: PropertyTesterOptions,
@@ -125,7 +127,7 @@ describe("Property class", function() {
             expect(spto).to.deep.equal(testOptions);
         }
 
-        it("ensures all options have valid values", function() {
+        it("ensures all options have valid values", function () {
             const loadOptions: PropertyTesterOptions = {
                 name: PROPERTY_NAME
             };
@@ -139,6 +141,7 @@ describe("Property class", function() {
                 name: PROPERTY_NAME,
                 normalizeAfterSet: DEFAULT_NORMALIZE_AFTER_SET,
                 normalizeBeforeValidate: DEFAULT_NORMALIZE_BEFORE_VALIDATE,
+                normalizeIfValid: DEFAULT_NORMALIZE_IF_VALID,
                 required: DEFAULT_REQUIRED,
                 stopValidationOnInvalid:
                     DEFAULT_PROPERTY_STOP_VALIDATION_ON_INVALID,
@@ -183,7 +186,7 @@ describe("Property class", function() {
         });
     });
 
-    describe("Testing functionality of the class as a String", function() {
+    describe("Testing functionality of the class as a String", function () {
         const STRING_NAME = "Test String";
         const NEW_STRING_DATA = "Hello People of the World";
         const EMPTY_STRING_DATA = "";
@@ -194,201 +197,226 @@ describe("Property class", function() {
             { name: STRING_NAME }, // 1
             { name: STRING_NAME, required: true }, // 2
             { name: STRING_NAME }, // 3
-            { name: STRING_NAME }, // 4
-            { name: STRING_NAME, required: true }, // 5
-            { name: STRING_NAME }, // 6
-            { name: STRING_NAME, normalizeBeforeValidate: true }, // 7
-            { name: STRING_NAME }, // 8
-            { name: STRING_NAME, invalidIfNotRequiredAndEmpty: true }, // 9
-            { name: STRING_NAME }, // 10
+            { name: STRING_NAME, normalizeIfValid: true }, // 4
+            { name: STRING_NAME }, // 5
+            { name: STRING_NAME, required: true }, // 6
+            { name: STRING_NAME }, // 7
+            { name: STRING_NAME, normalizeBeforeValidate: true }, // 8
+            { name: STRING_NAME }, // 9
+            { name: STRING_NAME, invalidIfNotRequiredAndEmpty: true }, // 10
             { name: STRING_NAME }, // 11
             { name: STRING_NAME }, // 12
             { name: STRING_NAME }, // 13
+            { name: STRING_NAME }, // 14
             {
                 name: STRING_NAME,
                 required: true,
                 stopValidationOnInvalid: true
-            }, // 14
-            { name: STRING_NAME, delayResponse: true }  // 15
+            }, // 15
+            { name: STRING_NAME, delayResponse: true }  // 16
         ];
 
         let spt: StringPropertyTester;
         let testNumber = 0;
 
-        beforeEach(function() {
+        beforeEach(function () {
             const options = TEST_OPTIONS[testNumber++];
             spt = new StringPropertyTester(STRING_DATA, options,
-                [ new NoopNormalizer() ]
+                [new NoopNormalizer()]
             );
         });
 
-        it(" 1. the getName method will return the proper name", function() {
-            expect(spt.getName()).to.equal(STRING_NAME);
-        });
+        it(testNumber + ". the getName method will return the proper name",
+            function () {
+                expect(spt.getName()).to.equal(STRING_NAME);
+            });
 
-        it(" 2. isRequired returns true as set in options", function() {
-            expect(spt.isRequired()).to.be.true;
-        });
+        it(testNumber + ". isRequired returns true as set in options",
+            function () {
+                expect(spt.isRequired()).to.be.true;
+            });
 
-        it(" 3. works through the normalize workflow", function() {
-            expect(spt.isNormalized()).to.be.false;
-            spt.normalize();
-            expect(spt.isNormalized()).to.be.true;
-            // this tests alternate paths for full coverage
-            spt.normalize();
-        });
+        it(testNumber + ". works through the normalize workflow",
+            async function () {
+                expect(spt.isNormalized()).to.be.false;
+                spt.normalize();
+                expect(spt.isNormalized()).to.be.true;
 
-        it(" 4. works through the get/set _value workflow", function() {
-            expect(spt.value).to.equal(STRING_DATA);
-            spt.value = NEW_STRING_DATA;
-            expect(spt.value).to.equal(NEW_STRING_DATA);
+                // this tests alternate paths for full coverage
+                spt.reset();
+                await spt.validate();
+                spt.normalize();
+                expect(spt.isNormalized()).to.be.false;
+            });
 
-            expect(function() {
-                // @ts-ignore
-                spt.value = null;
-            }).to.throw(Error);
+        it(testNumber + ". tests the normalizeIfValid workflow",
+            async function () {
+                expect(spt.isNormalized()).to.be.false;
+                await spt.validate();
+                expect(spt.isNormalized()).to.be.false;
+                spt.normalize();
+                expect(spt.isNormalized()).to.be.true;
+            });
 
-            expect(function() {
-                spt.value = undefined;
-            }).to.throw(Error);
+        it(testNumber + ". works through the get/set _value workflow",
+            function () {
+                expect(spt.value).to.equal(STRING_DATA);
+                spt.value = NEW_STRING_DATA;
+                expect(spt.value).to.equal(NEW_STRING_DATA);
 
-            expect(function() {
-                spt.value = EMPTY_STRING_DATA;
-            }).to.not.throw();
+                expect(function () {
+                    // @ts-ignore
+                    spt.value = null;
+                }).to.throw(Error);
 
-            // This is for code coverage
-            spt.value = EMPTY_STRING_DATA; // Compares to equal and does not reset
-        });
+                expect(function () {
+                    spt.value = undefined;
+                }).to.throw(Error);
+
+                expect(function () {
+                    spt.value = EMPTY_STRING_DATA;
+                }).to.not.throw();
+
+                // This is for code coverage
+                spt.value = EMPTY_STRING_DATA; // Compares to equal and does not reset
+            });
 
         // Regression test
-        it(" 5. validates that setting a new value resets the normalize " +
-            "workflow & errors (regression)", async function()
-        {
-            expect(spt.value).to.equal(STRING_DATA);
-            spt.value = EMPTY_STRING_DATA;
+        it(testNumber + ". validates that setting a new value resets the"
+            + " normalize workflow & errors (regression)",
+            async function () {
+                expect(spt.value).to.equal(STRING_DATA);
+                spt.value = EMPTY_STRING_DATA;
 
-            // Get some errors created (required option = true)
-            expect(await spt.validate()).to.be.false;
-            expect(spt.getErrors().length).to.equal(1);
+                // Get some errors created (required option = true)
+                expect(await spt.validate()).to.be.false;
+                expect(spt.getErrors().length).to.equal(1);
 
-            // And normalize our data
-            spt.normalize();
-            expect(spt.isNormalized()).to.be.true;
+                // And normalize our data
+                spt.normalize();
+                expect(spt.isNormalized()).to.be.true;
 
-            spt.value = NEW_STRING_DATA;
-            expect(spt.value).to.equal(NEW_STRING_DATA);
-            expect(spt.getErrors().length).to.equal(0);
-            expect(spt.isNormalized()).to.be.false;
-        });
+                spt.value = NEW_STRING_DATA;
+                expect(spt.value).to.equal(NEW_STRING_DATA);
+                expect(spt.getErrors().length).to.equal(0);
+                expect(spt.isNormalized()).to.be.false;
+            });
 
-        it(" 6. validates a default Property (String)", async function() {
-            expect(await spt.validate()).to.be.true;
+        it(testNumber + ". validates a default Property (String)",
+            async function () {
+                expect(await spt.validate()).to.be.true;
 
-            // This 2nd call is for code coverage
-            expect(await spt.validate()).to.be.true;
-        });
+                // This 2nd call is for code coverage
+                expect(await spt.validate()).to.be.true;
+            });
 
-        it(" 7. tests if the value is normalized before validation",
-        async function() {
-            expect(spt.isNormalized()).to.be.false;
-            expect(await spt.validate()).to.be.true;
-            expect(spt.isNormalized()).to.be.true;
+        it(testNumber + ". tests if the value is normalized before validation",
+            async function () {
+                expect(spt.isNormalized()).to.be.false;
+                expect(await spt.validate()).to.be.true;
+                expect(spt.isNormalized()).to.be.true;
 
-            // These test passes are for coverage
-            spt.value = NEW_STRING_DATA; // Just reset normalized...
-            spt.normalize();
-            expect(await spt.validate()).to.be.true;
-        });
+                // These test passes are for coverage
+                spt.value = NEW_STRING_DATA; // Just reset normalized...
+                spt.normalize();
+                expect(await spt.validate()).to.be.true;
+            });
 
-        it(" 8. tests isValid prior to validation.", async function() {
-            expect(spt.isValid()).to.be.false;
-            expect(await spt.validate()).to.be.true;
-        });
+        it(testNumber + ". tests isValid prior to validation.",
+            async function () {
+                expect(spt.isValid()).to.be.false;
+                expect(await spt.validate()).to.be.true;
+            });
 
-        it(" 9. tests if the data is empty, required is false, and" +
-            " invalidIfNotRequiredAndEmpty is true", async function()
-        {
-            spt.value = EMPTY_STRING_DATA;
-            expect(await spt.validate()).to.be.false;
-            expect(spt.getErrors()[0].code)
-                .to.be.equal(ValidatorErrorCodes.Empty);
-        });
+        it(testNumber + ". tests if the data is empty, required is false, and"
+            + " invalidIfNotRequiredAndEmpty is true",
+            async function () {
+                spt.value = EMPTY_STRING_DATA;
+                expect(await spt.validate()).to.be.false;
+                expect(spt.getErrors()[0].code)
+                    .to.be.equal(ValidatorErrorCodes.Empty);
+            });
 
-        it("10. tests if the data is empty, and required and " +
-            "invalidIfNotRequiredAndEmpty are false", async function()
-        {
-            spt.value = EMPTY_STRING_DATA;
-            expect(await spt.validate()).to.be.true;
-        });
+        it(testNumber + ". tests if the data is empty, and required and "
+            + "invalidIfNotRequiredAndEmpty are false",
+            async function () {
+                spt.value = EMPTY_STRING_DATA;
+                expect(await spt.validate()).to.be.true;
+            });
 
-        it("11. uses toString to get the data", function() {
+        it(testNumber + ". uses toString to get the data", function () {
             // toString should normalize the data
             expect(spt.isNormalized()).to.be.false;
             expect(spt.toString()).to.be.a("string").to.equal(STRING_DATA);
             expect(spt.isNormalized()).to.be.true;
         });
 
-        it("12. uses valueOf to get the data", function() {
+        it(testNumber + ". uses valueOf to get the data", function () {
             // valueOf should normalize the data
             expect(spt.isNormalized()).to.be.false;
             expect(spt.valueOf()).to.be.a("string").to.equal(STRING_DATA);
             expect(spt.isNormalized()).to.be.true;
         });
 
-        it("13. uses valueOf to add two GenericStringPropertyTester objects together", function() {
-            spt.value = FIRST_HALF_STRING_DATA;
-            const otherSp = new StringPropertyTester(SECOND_HALF_STRING_DATA, { name: "Test String #2" });
-            // @ts-ignore: allow objects to be added together
-            const result: string = spt + otherSp;
-            expect(result).to.equal(STRING_DATA);
-        });
+        it(testNumber + ". uses valueOf to add two GenericStringPropertyTester"
+            + " objects together",
+            function () {
+                spt.value = FIRST_HALF_STRING_DATA;
+                const otherSp = new StringPropertyTester(
+                    SECOND_HALF_STRING_DATA, { name: "Test String #2" }
+                );
 
-        it("14. tests if the data is empty, required is true, and" +
-            " stopValidationOnInvalid is true", async function()
-        {
-            spt.value = EMPTY_STRING_DATA;
-            expect(await spt.validate()).to.be.false;
-            expect(spt.getErrors()[0].code)
-                .to.be.equal(ValidatorErrorCodes.RequiredAndEmpty);
-        });
+                // @ts-ignore: allow objects to be added together
+                const result: string = spt + otherSp;
+                expect(result).to.equal(STRING_DATA);
+            });
 
-        it("15. tests calling validation twice, first validation " +
-            "is delayed 200ms",
-        async function() {
+        it(testNumber + ". tests if the data is empty, required is true, and"
+            + " stopValidationOnInvalid is true",
+            async function () {
+                spt.value = EMPTY_STRING_DATA;
+                expect(await spt.validate()).to.be.false;
+                expect(spt.getErrors()[0].code)
+                    .to.be.equal(ValidatorErrorCodes.RequiredAndEmpty);
+            });
 
-            async function firstTest() {
-                expect(await spt.validate()).to.be.true;
-            }
+        it(testNumber + ". tests calling validation twice, first validation "
+            + "is delayed 200ms",
+            async function () {
 
-            async function secondTest() {
-                // We only put this test in the loop SO we can get coverages
-                // of the isValidating method
-                try {
-                    let i = 0;
-                    while (spt.isValidating()) {
-                        i++;
-                        if (i === 1) {
-                            expect(await spt.validate())
-                                .to.be.false; // This is definitely wrong
-                        }
-                    }
-                    // We will never get here...
-                    expect(true).to.be.false;
-                } catch (err) {
-                    // This is an error indicating that validate was already
-                    // running.
-                    expect(err.message).to.equal(
-                        "You have called validate() while another" +
-                        " validate() call is running."
-                    );
+                async function firstTest() {
+                    expect(await spt.validate()).to.be.true;
                 }
-            }
 
-            await Promise.all([firstTest(), secondTest()]);
-        });
+                async function secondTest() {
+                    // We only put this test in the loop SO we can get coverages
+                    // of the isValidating method
+                    try {
+                        let i = 0;
+                        while (spt.isValidating()) {
+                            i++;
+                            if (i === 1) {
+                                expect(await spt.validate())
+                                    .to.be.false; // This is definitely wrong
+                            }
+                        }
+                        // We will never get here...
+                        expect(true).to.be.false;
+                    } catch (err) {
+                        // This is an error indicating that validate was already
+                        // running.
+                        expect(err.message).to.equal(
+                            "You have called validate() while another" +
+                            " validate() call is running."
+                        );
+                    }
+                }
+
+                await Promise.all([firstTest(), secondTest()]);
+            });
     });
 
-    describe("Testing validation of the class as a Number", function() {
+    describe("Testing validation of the class as a Number", function () {
         const NUMBER_DATA = 102696;
         const NUMBER_NAME = "Test Number";
         const NAN_NUMBER_DATA = NaN;
@@ -405,36 +433,36 @@ describe("Property class", function() {
         let np: NumberPropertyTester;
         let testNumber = 0;
 
-        beforeEach(function() {
+        beforeEach(function () {
             const options = TEST_OPTIONS[testNumber++];
             np = new NumberPropertyTester(NUMBER_DATA, options);
         });
 
-        it("validates a default Property (Number)", async function() {
+        it("validates a default Property (Number)", async function () {
             expect(await np.validate()).to.be.true;
         });
 
-        it("validates NaN, when required", async function() {
+        it("validates NaN, when required", async function () {
             np.value = NAN_NUMBER_DATA;
             expect(await np.validate()).to.be.false;
             expect(np.getErrors()[0].code).to.equal(ValidatorErrorCodes.RequiredAndEmpty);
         });
 
-        it("validates NaN, when not required", async function() {
+        it("validates NaN, when not required", async function () {
             np.value = NAN_NUMBER_DATA;
             expect(await np.validate()).to.be.true;
         });
 
-        it("uses valueOf to add two GenericNumberPropertyTester objects together", function() {
+        it("uses valueOf to add two GenericNumberPropertyTester objects together", function () {
             np.value = FIRST_HALF_NUMBER_DATA;
-            const otherNp = new NumberPropertyTester(SECOND_HALF_NUMBER_DATA, { name: "Test Number #2"});
+            const otherNp = new NumberPropertyTester(SECOND_HALF_NUMBER_DATA, { name: "Test Number #2" });
             // @ts-ignore: allow objects to be added together
             const result: number = np + otherNp;
             expect(result).to.equal(NUMBER_DATA);
         });
     });
 
-    describe("Testing validation of the class as a Boolean", function() {
+    describe("Testing validation of the class as a Boolean", function () {
         const BOOLEAN_DATA = true;
         const BOOLEAN_NAME = "Test Boolean";
         const NEW_BOOLEAN_DATA = false;
@@ -448,12 +476,12 @@ describe("Property class", function() {
         let bp: BooleanPropertyTester;
         let testNumber = 0;
 
-        beforeEach(function() {
+        beforeEach(function () {
             const options = TEST_OPTIONS[testNumber++];
             bp = new BooleanPropertyTester(BOOLEAN_DATA, options);
         });
 
-        it("validates a default Property (Boolean)", async function() {
+        it("validates a default Property (Boolean)", async function () {
             expect(await bp.validate()).to.be.true;
         });
 
@@ -463,7 +491,7 @@ describe("Property class", function() {
         // decendant class BooleanProperty temporarily sets the required option
         // to false when calling the super.validate to ensure this wacky but
         // valid logic doesn't come and bite you.
-        it("validates false, when required", async function() {
+        it("validates false, when required", async function () {
             bp.value = NEW_BOOLEAN_DATA;
             expect(await bp.validate()).to.be.false;
             expect(bp.getErrors()[0].code).to.equal(ValidatorErrorCodes.RequiredAndEmpty);
@@ -473,7 +501,7 @@ describe("Property class", function() {
         // ALWAYS be valid since a boolean value only has two values
         // and we do not allow undefined or null to be set as a value
         // within these properties.
-        it("validates false, when not required", async function() {
+        it("validates false, when not required", async function () {
             bp.value = NEW_BOOLEAN_DATA;
             expect(await bp.validate()).to.be.true;
         });
