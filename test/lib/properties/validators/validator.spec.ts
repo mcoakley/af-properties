@@ -1,13 +1,9 @@
-import util = require("util");
-const setTimeoutPromise = util.promisify(setTimeout);
+import "mocha";
 
 import { isEmpty, isNumber, isUsable } from "af-conditionals";
 import chai = require("chai");
 import chaiAsPromised = require("chai-as-promised");
-import "mocha";
-
-chai.use(chaiAsPromised);
-const expect = chai.expect;
+import util = require("util");
 
 import {
     DEFAULT_VALIDATOR_NAME,
@@ -16,8 +12,13 @@ import {
     VALIDATOR_ENRICHED_DATA_EVENT,
     ValidatorEnrichedDataEvent,
     ValidatorErrorCodes,
-    ValidatorOptions
+    ValidatorOptions,
 } from "../../../../src/lib";
+
+const setTimeoutPromise = util.promisify(setTimeout);
+
+chai.use(chaiAsPromised);
+const expect = chai.expect;
 
 // tslint:disable:no-unused-expression no-null-keyword no-console
 
@@ -39,7 +40,7 @@ abstract class ValidatorTester<T>
         }
         const valid = this.testValue(value);
         if (!valid) {
-            if (!isEmpty.test(value)) {
+            if (!isEmpty(value)) {
                 this.addInvalidError(["Somethings is wrong, very, wrong!"]);
             } else {
                 this.addEmptyError(["I ain't got nothing!"]);
@@ -59,7 +60,7 @@ abstract class ValidatorTester<T>
 class StringValidatorTester extends ValidatorTester<string> {
     protected testValue(value: string): boolean {
         // Test 3 different cases...
-        return isUsable.test(value) && !isEmpty.test(value) &&
+        return isUsable(value) && !isEmpty(value) &&
             value.length < 80;
     }
 }
@@ -74,13 +75,13 @@ class StringValidatorEnrichmentTester
         };
 
         this.emitEnrichedData(enrichedData, value);
-        return isUsable.test(value);
+        return isUsable(value);
     }
 }
 
 class NumberValidatorTester extends ValidatorTester<number> {
     protected testValue(value: number): boolean {
-        return isNumber.test(value) &&
+        return isNumber(value) &&
             ((this.options.required && !isNaN(value)) ||
                 !this.options.required);
     }
@@ -180,7 +181,7 @@ describe("Validator class", function () {
             svt = new StringValidatorTester(options);
         });
 
-        it(" 1. validates a default Validator (String)", async function() {
+        it(" 1. validates a default Validator (String)", async function () {
             expect(await svt.validate(STRING_DATA)).to.be.true;
 
             // this is for coverage and should simply return
@@ -188,14 +189,14 @@ describe("Validator class", function () {
         });
 
         it(" 2. tests if the data is empty, required is true",
-            async function() {
+            async function () {
                 expect(await svt.validate(EMPTY_STRING_DATA)).to.be.false;
                 expect(svt.getErrors()[0].code)
                     .to.be.equal(ValidatorErrorCodes.RequiredAndEmpty);
             });
 
         it(" 3. tests if the data is empty, required is false",
-            async function() {
+            async function () {
                 expect(await svt.validate(EMPTY_STRING_DATA)).to.be.false;
                 expect(svt.getErrors()[0].code)
                     .to.be.equal(ValidatorErrorCodes.Empty);
@@ -203,7 +204,7 @@ describe("Validator class", function () {
 
         it(" 4. tests if the data is empty, required is false, validation " +
             "is delayed 200ms",
-            async function() {
+            async function () {
 
                 async function firstTest() {
                     expect(await svt.validate(EMPTY_STRING_DATA)).to.be.false;
@@ -240,7 +241,7 @@ describe("Validator class", function () {
 
         it(" 5. tests isValueAllowed and reset and addInvalidError for " +
             "coverage.",
-            async function() {
+            async function () {
                 expect(svt.isValueAllowed(LONG_STRING_DATA)).to.be.true;
                 expect(await svt.validate(LONG_STRING_DATA)).to.be.false;
                 expect(svt.getErrors()[0].code)
@@ -251,13 +252,13 @@ describe("Validator class", function () {
             });
 
         it(" 6. tests isValueAllowed while the value is required.",
-            async function() {
+            async function () {
                 expect(await svt.validate(LONG_STRING_DATA)).to.be.false;
                 expect(svt.getErrors()[0].code)
                     .to.be.equal(ValidatorErrorCodes.RequiredAndInvalid);
             });
 
-        it(" 7. validates that the object gets a default name", function() {
+        it(" 7. validates that the object gets a default name", function () {
             const options = svt.getOptions();
             expect(options.name).to.equal(DEFAULT_VALIDATOR_NAME + "_" +
                 Validator.getValidatorCount());
@@ -265,7 +266,7 @@ describe("Validator class", function () {
     });
 
     describe("Testing validation of the class with data enrichment",
-        function() {
+        function () {
             const STRING_DATA_FIRST_THREE = "Hel";
             const testEvent: ValidatorEnrichedDataEvent<string> = {
                 context: undefined,
@@ -278,7 +279,7 @@ describe("Validator class", function () {
             };
 
             it("tests that validate emits the first 3 characters of the data",
-                async function() {
+                async function () {
                     const gsvet = new StringValidatorEnrichmentTester(
                         { name: VALIDATOR_NAME }
                     );
@@ -293,7 +294,7 @@ describe("Validator class", function () {
                 });
         });
 
-    describe("Testing validation of the class as a Number", function() {
+    describe("Testing validation of the class as a Number", function () {
         const NUMBER_DATA = 102696;
         const NAN_NUMBER_DATA = NaN;
 
@@ -306,27 +307,27 @@ describe("Validator class", function () {
         let nvt: NumberValidatorTester;
         let testNumber = 0;
 
-        beforeEach(function() {
+        beforeEach(function () {
             const options = TEST_OPTIONS[testNumber++];
             nvt = new NumberValidatorTester(options);
         });
 
-        it("validates a default Validator (Number)", async function() {
+        it("validates a default Validator (Number)", async function () {
             expect(await nvt.validate(NUMBER_DATA)).to.be.true;
         });
 
-        it("validates NaN, when required", async function() {
+        it("validates NaN, when required", async function () {
             expect(await nvt.validate(NAN_NUMBER_DATA)).to.be.false;
             expect(nvt.getErrors()[0].code)
                 .to.equal(ValidatorErrorCodes.RequiredAndEmpty);
         });
 
-        it("validates NaN, when not required", async function() {
+        it("validates NaN, when not required", async function () {
             expect(await nvt.validate(NAN_NUMBER_DATA)).to.be.true;
         });
     });
 
-    describe("Testing validation of the class as a Boolean", function() {
+    describe("Testing validation of the class as a Boolean", function () {
         const BOOLEAN_DATA = true;
         const NEW_BOOLEAN_DATA = false;
 
@@ -339,12 +340,12 @@ describe("Validator class", function () {
         let bvt: BooleanValidatorTester;
         let testNumber = 0;
 
-        beforeEach(function() {
+        beforeEach(function () {
             const options = TEST_OPTIONS[testNumber++];
             bvt = new BooleanValidatorTester(options);
         });
 
-        it("validates a default Validator (Boolean)", async function() {
+        it("validates a default Validator (Boolean)", async function () {
             expect(await bvt.validate(BOOLEAN_DATA)).to.be.true;
         });
 
@@ -354,7 +355,7 @@ describe("Validator class", function () {
         // decendant class BooleanProperty temporarily sets the required option
         // to false when calling the super.isValid to ensure this wacky but
         // valid logic doesn't come and bite you.
-        it("validates false, when required", async function() {
+        it("validates false, when required", async function () {
             expect(await bvt.validate(NEW_BOOLEAN_DATA)).to.be.false;
             expect(bvt.getErrors()[0].code)
                 .to.equal(ValidatorErrorCodes.RequiredAndEmpty);
@@ -364,7 +365,7 @@ describe("Validator class", function () {
         // ALWAYS be valid since a boolean value only has two values
         // and we do not allow undefined or null to be set as a value
         // within these properties.
-        it("validates false, when not required", async function() {
+        it("validates false, when not required", async function () {
             expect(await bvt.validate(NEW_BOOLEAN_DATA)).to.be.true;
         });
     });

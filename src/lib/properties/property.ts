@@ -123,10 +123,10 @@ export class Property
         super();
 
         this._validateOptions(newOptions);
-        if (!isArray.test(this.normalizers) ||
+        if (!isArray(this.normalizers) ||
             this.normalizers.length === 0
         ) this.initDefaultNormalizers();
-        if (!isArray.test(this.validators) ||
+        if (!isArray(this.validators) ||
             this.validators.length === 0
         ) this.initDefaultValidators();
 
@@ -324,32 +324,32 @@ export class Property
     }
 
     protected _validateOptions(newOptions: O): void {
-        if (!isUsable.test(newOptions) || !isUsable.test(newOptions.name) ||
-            isEmpty.test(newOptions.name)
+        if (!isUsable(newOptions) || !isUsable(newOptions.name) ||
+            isEmpty(newOptions.name)
         ) {
             throw new TypeError("Must supply a valid options object.");
         }
         this.options = newOptions;
         this.options.displayName =
             this.options.displayName || this.options.name;
-        if (!isUsable.test(this.options.invalidIfNotRequiredAndEmpty)) {
+        if (!isUsable(this.options.invalidIfNotRequiredAndEmpty)) {
             this.options.invalidIfNotRequiredAndEmpty =
                 DEFAULT_INVALID_IF_NOT_REQUIRED_AND_EMPTY;
         }
-        if (!isUsable.test(this.options.normalizeAfterSet)) {
+        if (!isUsable(this.options.normalizeAfterSet)) {
             this.options.normalizeAfterSet = DEFAULT_NORMALIZE_AFTER_SET;
         }
-        if (!isUsable.test(this.options.normalizeBeforeValidate)) {
+        if (!isUsable(this.options.normalizeBeforeValidate)) {
             this.options.normalizeBeforeValidate =
                 DEFAULT_NORMALIZE_BEFORE_VALIDATE;
         }
-        if (!isUsable.test(this.options.normalizeIfValid)) {
+        if (!isUsable(this.options.normalizeIfValid)) {
             this.options.normalizeIfValid = DEFAULT_NORMALIZE_IF_VALID;
         }
-        if (!isUsable.test(this.options.required)) {
+        if (!isUsable(this.options.required)) {
             this.options.required = DEFAULT_REQUIRED;
         }
-        if (!isUsable.test(this.options.stopValidationOnInvalid)) {
+        if (!isUsable(this.options.stopValidationOnInvalid)) {
             this.options.stopValidationOnInvalid =
                 DEFAULT_PROPERTY_STOP_VALIDATION_ON_INVALID;
         }

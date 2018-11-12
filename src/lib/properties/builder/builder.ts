@@ -6,17 +6,17 @@ import {
     propertyAliasMap,
     propertyClassificationMap,
     PropertyDescription,
-    PropertyMap
+    PropertyMap,
 } from "./describe-property";
 
 export function getPropertyDescription(
     propertyName: string,
     aliasMap?: PropertyMap
 ): PropertyDescription | undefined {
-    if (!isUsable.test(propertyName)) return undefined;
+    if (!isUsable(propertyName)) return undefined;
 
     propertyName = propertyName.toLocaleLowerCase();
-    const propertyType = (isUsable.test(aliasMap) ?
+    const propertyType = (isUsable(aliasMap) ?
         aliasMap![propertyName] || propertyAliasMap[propertyName] :
         propertyAliasMap[propertyName]
     );
@@ -30,9 +30,9 @@ export function propertyBuilder(
     aliasMap?: PropertyMap
 ): PropertyProvider | undefined {
     const propertyDescription = getPropertyDescription(propertyName, aliasMap);
-    if (isUsable.test(propertyDescription)) {
+    if (isUsable(propertyDescription)) {
         propertyDescription!.options.name = propertyName;
-        if (!isUsable.test(
+        if (!isUsable(
             (propertyDescription!.options as RegExpPropertyOptions).mask)
         ) {
             return propertyDescription!.factory(

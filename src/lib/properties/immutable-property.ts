@@ -6,11 +6,12 @@
  * @author Mike Coakley <mcoakley@acmeframework.com>
  * @version 0.1.0
  */
-
 import { isUsable } from "af-conditionals";
 import EventEmitter from "eventemitter3";
+
 import { PropertyProvider } from "./property";
 import { ValidatorError } from "./validators";
+
 
 export const DEFAULT_IMMUTABLE_PROPERTY_NAME = "immutable_property";
 
@@ -39,7 +40,7 @@ export class ImmutableProperty<T>
     constructor(newValue: T, newName: string, newDisplayName?: string) {
         super();
 
-        if (!isUsable.test(newName)) {
+        if (!isUsable(newName)) {
             throw new TypeError(
                 "Must supply a valid options to the constructor."
             );
@@ -113,7 +114,7 @@ export class ImmutableProperty<T>
     }
 
     protected isValueAllowed(newValue: T): boolean {
-        return isUsable.test(newValue);
+        return isUsable(newValue);
     }
 }
 

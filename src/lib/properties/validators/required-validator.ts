@@ -30,7 +30,7 @@ export class RequiredValidator
     extends Validator<T, O>
 {
     protected async _validate(value: T): Promise<boolean> {
-        if (isEmpty.test(value) &&
+        if (isEmpty(value) &&
             (this.options.required ||
                 this.options.invalidIfNotRequiredAndEmpty)
         ) {
@@ -45,18 +45,18 @@ export class RequiredValidator
     protected _validateOptions(newOptions: O) {
         super._validateOptions(newOptions);
 
-        const haveParent = isUsable.test(this.options.parent);
+        const haveParent = isUsable(this.options.parent);
         let parentOptions: PropertyOptions;
         if (haveParent) parentOptions = this.options.parent!.getOptions();
 
         let defaultInvalidIfNotRequiredAndEmpty =
             DEFAULT_INVALID_IF_NOT_REQUIRED_AND_EMPTY;
         if (haveParent &&
-            isUsable.test(parentOptions!.invalidIfNotRequiredAndEmpty)) {
+            isUsable(parentOptions!.invalidIfNotRequiredAndEmpty)) {
             defaultInvalidIfNotRequiredAndEmpty =
                 parentOptions!.invalidIfNotRequiredAndEmpty!;
         }
-        if (!isUsable.test(this.options.invalidIfNotRequiredAndEmpty)) {
+        if (!isUsable(this.options.invalidIfNotRequiredAndEmpty)) {
             this.options.invalidIfNotRequiredAndEmpty =
                 defaultInvalidIfNotRequiredAndEmpty;
         }

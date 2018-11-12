@@ -5,7 +5,7 @@ import {
     DEFAULT_NUMBER_BOUNDS,
     DEFAULT_NUMBER_MAX_VALUE,
     DEFAULT_NUMBER_MIN_VALUE,
-    NumberBoundTypes
+    NumberBoundTypes,
 } from "../number-property-defs";
 import { Validator, ValidatorOptions } from "./validator";
 
@@ -46,7 +46,7 @@ export class NumberValidator
     protected _validateOptions(newOptions: O) {
         super._validateOptions(newOptions);
 
-        const haveParent = isUsable.test(this.options.parent);
+        const haveParent = isUsable(this.options.parent);
         let parentOptions: NumberPropertyOptions;
         if (haveParent) parentOptions = this.options.parent!.getOptions();
 

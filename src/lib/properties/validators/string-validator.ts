@@ -1,7 +1,10 @@
 import { isUsable } from "af-conditionals";
 
 import { StringPropertyOptions } from "../string-property";
-import { DEFAULT_STRING_MAX_LENGTH, DEFAULT_STRING_MIN_LENGTH } from "../string-property-defs";
+import {
+    DEFAULT_STRING_MAX_LENGTH,
+    DEFAULT_STRING_MIN_LENGTH,
+} from "../string-property-defs";
 import { Validator, ValidatorOptions } from "./validator";
 
 export interface StringValidatorOptions
@@ -42,7 +45,7 @@ export class StringValidator
     protected _validateOptions(newOptions: O) {
         super._validateOptions(newOptions);
 
-        const haveParent = isUsable.test(this.options.parent);
+        const haveParent = isUsable(this.options.parent);
         let parentOptions: StringPropertyOptions;
         if (haveParent) parentOptions = this.options.parent!.getOptions();
 

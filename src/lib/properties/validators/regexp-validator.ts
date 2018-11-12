@@ -28,15 +28,15 @@ export class RegExpValidator
     protected _validateOptions(newOptions: O) {
         super._validateOptions(newOptions);
 
-        const haveParent = isUsable.test(this.options.parent);
+        const haveParent = isUsable(this.options.parent);
         let parentOptions: RegExpPropertyOptions;
         if (haveParent) {
             parentOptions = this.options.parent!.getOptions();
         }
 
-        if ((!haveParent && !isUsable.test(this.options.mask)) ||
-            (haveParent && !isUsable.test(this.options.mask) &&
-                !isUsable.test(parentOptions!.mask)
+        if ((!haveParent && !isUsable(this.options.mask)) ||
+            (haveParent && !isUsable(this.options.mask) &&
+                !isUsable(parentOptions!.mask)
             )
         ) {
             throw new TypeError("You must supply a valid options object");

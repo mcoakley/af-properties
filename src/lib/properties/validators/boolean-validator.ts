@@ -10,6 +10,6 @@ export class BooleanValidator
     extends Validator<boolean, O>
 {
     protected async _validate(value: boolean): Promise<boolean> {
-        return Promise.resolve(!isEmpty.test(value));
+        return Promise.resolve(!isEmpty(value));
     }
 }

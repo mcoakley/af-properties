@@ -4,12 +4,9 @@ import {
     DEFAULT_STRING_NORMALIZE_TO_LOWER,
     DEFAULT_STRING_NORMALIZE_TO_UPPER,
     DEFAULT_STRING_TRIM_LEFT,
-    DEFAULT_STRING_TRIM_RIGHT
+    DEFAULT_STRING_TRIM_RIGHT,
 } from "../string-property-defs";
-import {
-    Normalizer,
-    NormalizerOptions,
-} from "./normalizer";
+import { Normalizer, NormalizerOptions } from "./normalizer";
 
 export interface StringNormalizerOptions extends NormalizerOptions {
     normalizeToLower?: boolean;
@@ -45,7 +42,7 @@ export class StringNormalizer
     protected _validateOptions(newOptions: O) {
         super._validateOptions(newOptions);
 
-        const haveParent = isUsable.test(this.options.parent);
+        const haveParent = isUsable(this.options.parent);
         let parentOptions: StringNormalizerOptions;
         if (haveParent) parentOptions = this.options.parent!.getOptions();
 
@@ -55,29 +52,29 @@ export class StringNormalizer
         let defaultTrimRight = DEFAULT_STRING_TRIM_RIGHT;
 
         if (haveParent) {
-            if (isUsable.test(parentOptions!.normalizeToLower)) {
+            if (isUsable(parentOptions!.normalizeToLower)) {
                 defaultNormalizeToLower = parentOptions!.normalizeToLower!;
             }
-            if (isUsable.test(parentOptions!.normalizeToUpper)) {
+            if (isUsable(parentOptions!.normalizeToUpper)) {
                 defaultNormalizeToUpper = parentOptions!.normalizeToUpper!;
             }
-            if (isUsable.test(parentOptions!.trimLeft)) {
+            if (isUsable(parentOptions!.trimLeft)) {
                 defaultTrimLeft = parentOptions!.trimLeft!;
             }
-            if (isUsable.test(parentOptions!.trimRight)) {
+            if (isUsable(parentOptions!.trimRight)) {
                 defaultTrimRight = parentOptions!.trimRight!;
             }
         }
-        if (!isUsable.test(this.options.normalizeToLower)) {
+        if (!isUsable(this.options.normalizeToLower)) {
             this.options.normalizeToLower = defaultNormalizeToLower;
         }
-        if (!isUsable.test(this.options.normalizeToUpper)) {
+        if (!isUsable(this.options.normalizeToUpper)) {
             this.options.normalizeToUpper = defaultNormalizeToUpper;
         }
-        if (!isUsable.test(this.options.trimLeft)) {
+        if (!isUsable(this.options.trimLeft)) {
             this.options.trimLeft = defaultTrimLeft;
         }
-        if (!isUsable.test(this.options.trimRight)) {
+        if (!isUsable(this.options.trimRight)) {
             this.options.trimRight = defaultTrimRight;
         }
         if (this.options.normalizeToLower && this.options.normalizeToUpper) {

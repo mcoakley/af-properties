@@ -129,7 +129,7 @@ export abstract class Validator
     }
 
     public isValueAllowed(newValue: T | undefined): boolean {
-        return isUsable.test(newValue);
+        return isUsable(newValue);
     }
 
     public reset(): void {
@@ -207,10 +207,10 @@ export abstract class Validator
             required: DEFAULT_REQUIRED
         } as O;
 
-        if (isUsable.test(newOptions)) {
+        if (isUsable(newOptions)) {
             this.options = newOptions!;
 
-            if (isUsable.test(this.options.parent)) {
+            if (isUsable(this.options.parent)) {
                 const parentOptions = this.options.parent!.getOptions();
 
                 this.options.displayName =
@@ -218,7 +218,7 @@ export abstract class Validator
                 this.options.name =
                     this.options.name || parentOptions.name;
 
-                if (!isUsable.test(this.options.required)) {
+                if (!isUsable(this.options.required)) {
                     this.options.required = parentOptions.required;
                 }
             }
@@ -235,7 +235,7 @@ export abstract class Validator
             defaultOptions.displayName;
         this.options.name = this.options.name || defaultOptions.name;
 
-        if (!isUsable.test(this.options.required)) {
+        if (!isUsable(this.options.required)) {
             this.options.required = defaultOptions.required;
         }
     }

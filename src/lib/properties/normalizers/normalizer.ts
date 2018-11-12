@@ -2,7 +2,10 @@ import { isUsable } from "af-conditionals";
 import { EventEmitter } from "eventemitter3";
 
 import { PropertyProvider } from "../property";
-import { PROPERTY_NORMALIZE_EVENT, PropertyValueChangeEvent } from "../property-defs";
+import {
+    PROPERTY_NORMALIZE_EVENT,
+    PropertyValueChangeEvent,
+} from "../property-defs";
 
 export const DEFAULT_NORMALIZER_NAME = "generic_normalizer";
 
@@ -76,10 +79,10 @@ export abstract class Normalizer
             parent: undefined
         } as O;
 
-        if (isUsable.test(newOptions)) {
+        if (isUsable(newOptions)) {
             this.options = newOptions!;
 
-            if (isUsable.test(newOptions!.parent)) {
+            if (isUsable(newOptions!.parent)) {
                 const parentOptions = newOptions!.parent!.getOptions();
                 this.options.displayName =
                     this.options.displayName || parentOptions.displayName;
