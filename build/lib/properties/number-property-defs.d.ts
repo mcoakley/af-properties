@@ -5,5 +5,5 @@ export declare enum NumberBoundTypes {
 }
 export declare const DEFAULT_NUMBER_MAX_VALUE = 0;
 export declare const DEFAULT_NUMBER_MIN_VALUE = 0;
-export declare const DEFAULT_NUMBER_BOUNDS: NumberBoundTypes;
+export declare const DEFAULT_NUMBER_BOUNDS = NumberBoundTypes.unbounded;
 export declare const DEFAULT_NUMBER_PROPERTY_NAME = "number_property";

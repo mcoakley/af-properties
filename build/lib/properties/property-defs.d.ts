@@ -16,11 +16,11 @@ export interface PropertyValidationEvent<T> {
     validated: boolean;
     value: T;
 }
-export declare const DEFAULT_INVALID_IF_NOT_REQUIRED_AND_EMPTY: boolean;
-export declare const DEFAULT_NORMALIZE_AFTER_SET: boolean;
-export declare const DEFAULT_NORMALIZE_BEFORE_VALIDATE: boolean;
-export declare const DEFAULT_NORMALIZE_IF_VALID: boolean;
-export declare const DEFAULT_REQUIRED: boolean;
-export declare const DEFAULT_PROPERTY_STOP_VALIDATION_ON_INVALID: boolean;
+export declare const DEFAULT_INVALID_IF_NOT_REQUIRED_AND_EMPTY = false;
+export declare const DEFAULT_NORMALIZE_AFTER_SET = false;
+export declare const DEFAULT_NORMALIZE_BEFORE_VALIDATE = false;
+export declare const DEFAULT_NORMALIZE_IF_VALID = false;
+export declare const DEFAULT_REQUIRED = false;
+export declare const DEFAULT_PROPERTY_STOP_VALIDATION_ON_INVALID = false;
 export declare const DEFAULT_PROPERTY_WAIT_INTERVAL = 10;
 export declare const DEFAULT_PROPERTY_WAIT_TIMEOUT = 500;

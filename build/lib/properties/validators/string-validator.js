@@ -39,7 +39,7 @@ class StringValidator extends validator_1.Validator {
     }
     _validateOptions(newOptions) {
         super._validateOptions(newOptions);
-        const haveParent = af_conditionals_1.isUsable.test(this.options.parent);
+        const haveParent = af_conditionals_1.isUsable(this.options.parent);
         let parentOptions;
         if (haveParent)
             parentOptions = this.options.parent.getOptions();

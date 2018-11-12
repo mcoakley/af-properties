@@ -13,7 +13,7 @@ const validator_1 = require("./validator");
 class BooleanValidator extends validator_1.Validator {
     _validate(value) {
         return __awaiter(this, void 0, void 0, function* () {
-            return Promise.resolve(!af_conditionals_1.isEmpty.test(value));
+            return Promise.resolve(!af_conditionals_1.isEmpty(value));
         });
     }
 }

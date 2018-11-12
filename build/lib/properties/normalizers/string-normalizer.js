@@ -24,7 +24,7 @@ class StringNormalizer extends normalizer_1.Normalizer {
     }
     _validateOptions(newOptions) {
         super._validateOptions(newOptions);
-        const haveParent = af_conditionals_1.isUsable.test(this.options.parent);
+        const haveParent = af_conditionals_1.isUsable(this.options.parent);
         let parentOptions;
         if (haveParent)
             parentOptions = this.options.parent.getOptions();
@@ -33,29 +33,29 @@ class StringNormalizer extends normalizer_1.Normalizer {
         let defaultTrimLeft = string_property_defs_1.DEFAULT_STRING_TRIM_LEFT;
         let defaultTrimRight = string_property_defs_1.DEFAULT_STRING_TRIM_RIGHT;
         if (haveParent) {
-            if (af_conditionals_1.isUsable.test(parentOptions.normalizeToLower)) {
+            if (af_conditionals_1.isUsable(parentOptions.normalizeToLower)) {
                 defaultNormalizeToLower = parentOptions.normalizeToLower;
             }
-            if (af_conditionals_1.isUsable.test(parentOptions.normalizeToUpper)) {
+            if (af_conditionals_1.isUsable(parentOptions.normalizeToUpper)) {
                 defaultNormalizeToUpper = parentOptions.normalizeToUpper;
             }
-            if (af_conditionals_1.isUsable.test(parentOptions.trimLeft)) {
+            if (af_conditionals_1.isUsable(parentOptions.trimLeft)) {
                 defaultTrimLeft = parentOptions.trimLeft;
             }
-            if (af_conditionals_1.isUsable.test(parentOptions.trimRight)) {
+            if (af_conditionals_1.isUsable(parentOptions.trimRight)) {
                 defaultTrimRight = parentOptions.trimRight;
             }
         }
-        if (!af_conditionals_1.isUsable.test(this.options.normalizeToLower)) {
+        if (!af_conditionals_1.isUsable(this.options.normalizeToLower)) {
             this.options.normalizeToLower = defaultNormalizeToLower;
         }
-        if (!af_conditionals_1.isUsable.test(this.options.normalizeToUpper)) {
+        if (!af_conditionals_1.isUsable(this.options.normalizeToUpper)) {
             this.options.normalizeToUpper = defaultNormalizeToUpper;
         }
-        if (!af_conditionals_1.isUsable.test(this.options.trimLeft)) {
+        if (!af_conditionals_1.isUsable(this.options.trimLeft)) {
             this.options.trimLeft = defaultTrimLeft;
         }
-        if (!af_conditionals_1.isUsable.test(this.options.trimRight)) {
+        if (!af_conditionals_1.isUsable(this.options.trimRight)) {
             this.options.trimRight = defaultTrimRight;
         }
         if (this.options.normalizeToLower && this.options.normalizeToUpper) {

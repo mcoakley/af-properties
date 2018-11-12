@@ -17,7 +17,7 @@ exports.DEFAULT_IMMUTABLE_PROPERTY_NAME = "immutable_property";
 class ImmutableProperty extends eventemitter3_1.default.EventEmitter {
     constructor(newValue, newName, newDisplayName) {
         super();
-        if (!af_conditionals_1.isUsable.test(newName)) {
+        if (!af_conditionals_1.isUsable(newName)) {
             throw new TypeError("Must supply a valid options to the constructor.");
         }
         this._name = newName;
@@ -80,7 +80,7 @@ class ImmutableProperty extends eventemitter3_1.default.EventEmitter {
         return this.value;
     }
     isValueAllowed(newValue) {
-        return af_conditionals_1.isUsable.test(newValue);
+        return af_conditionals_1.isUsable(newValue);
     }
 }
 ImmutableProperty.propertyCount = 0;

@@ -14,7 +14,7 @@ const validator_1 = require("./validator");
 class RequiredValidator extends validator_1.Validator {
     _validate(value) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (af_conditionals_1.isEmpty.test(value) &&
+            if (af_conditionals_1.isEmpty(value) &&
                 (this.options.required ||
                     this.options.invalidIfNotRequiredAndEmpty)) {
                 this.addEmptyError([
@@ -27,17 +27,17 @@ class RequiredValidator extends validator_1.Validator {
     }
     _validateOptions(newOptions) {
         super._validateOptions(newOptions);
-        const haveParent = af_conditionals_1.isUsable.test(this.options.parent);
+        const haveParent = af_conditionals_1.isUsable(this.options.parent);
         let parentOptions;
         if (haveParent)
             parentOptions = this.options.parent.getOptions();
         let defaultInvalidIfNotRequiredAndEmpty = property_defs_1.DEFAULT_INVALID_IF_NOT_REQUIRED_AND_EMPTY;
         if (haveParent &&
-            af_conditionals_1.isUsable.test(parentOptions.invalidIfNotRequiredAndEmpty)) {
+            af_conditionals_1.isUsable(parentOptions.invalidIfNotRequiredAndEmpty)) {
             defaultInvalidIfNotRequiredAndEmpty =
                 parentOptions.invalidIfNotRequiredAndEmpty;
         }
-        if (!af_conditionals_1.isUsable.test(this.options.invalidIfNotRequiredAndEmpty)) {
+        if (!af_conditionals_1.isUsable(this.options.invalidIfNotRequiredAndEmpty)) {
             this.options.invalidIfNotRequiredAndEmpty =
                 defaultInvalidIfNotRequiredAndEmpty;
         }

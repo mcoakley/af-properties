@@ -47,7 +47,7 @@ class Validator extends eventemitter3_1.EventEmitter {
         return this.validating;
     }
     isValueAllowed(newValue) {
-        return af_conditionals_1.isUsable.test(newValue);
+        return af_conditionals_1.isUsable(newValue);
     }
     reset() {
         this.errors = [];
@@ -111,15 +111,15 @@ class Validator extends eventemitter3_1.EventEmitter {
             parent: undefined,
             required: property_defs_1.DEFAULT_REQUIRED
         };
-        if (af_conditionals_1.isUsable.test(newOptions)) {
+        if (af_conditionals_1.isUsable(newOptions)) {
             this.options = newOptions;
-            if (af_conditionals_1.isUsable.test(this.options.parent)) {
+            if (af_conditionals_1.isUsable(this.options.parent)) {
                 const parentOptions = this.options.parent.getOptions();
                 this.options.displayName =
                     this.options.displayName || parentOptions.displayName;
                 this.options.name =
                     this.options.name || parentOptions.name;
-                if (!af_conditionals_1.isUsable.test(this.options.required)) {
+                if (!af_conditionals_1.isUsable(this.options.required)) {
                     this.options.required = parentOptions.required;
                 }
             }
@@ -131,7 +131,7 @@ class Validator extends eventemitter3_1.EventEmitter {
             this.options.displayName || this.options.name ||
                 defaultOptions.displayName;
         this.options.name = this.options.name || defaultOptions.name;
-        if (!af_conditionals_1.isUsable.test(this.options.required)) {
+        if (!af_conditionals_1.isUsable(this.options.required)) {
             this.options.required = defaultOptions.required;
         }
     }

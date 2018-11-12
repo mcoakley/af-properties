@@ -42,9 +42,9 @@ class Normalizer extends eventemitter3_1.EventEmitter {
             name: exports.DEFAULT_NORMALIZER_NAME + "_" + gc,
             parent: undefined
         };
-        if (af_conditionals_1.isUsable.test(newOptions)) {
+        if (af_conditionals_1.isUsable(newOptions)) {
             this.options = newOptions;
-            if (af_conditionals_1.isUsable.test(newOptions.parent)) {
+            if (af_conditionals_1.isUsable(newOptions.parent)) {
                 const parentOptions = newOptions.parent.getOptions();
                 this.options.displayName =
                     this.options.displayName || parentOptions.displayName;

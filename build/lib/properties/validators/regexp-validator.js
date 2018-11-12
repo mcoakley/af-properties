@@ -24,14 +24,14 @@ class RegExpValidator extends string_validator_1.StringValidator {
     }
     _validateOptions(newOptions) {
         super._validateOptions(newOptions);
-        const haveParent = af_conditionals_1.isUsable.test(this.options.parent);
+        const haveParent = af_conditionals_1.isUsable(this.options.parent);
         let parentOptions;
         if (haveParent) {
             parentOptions = this.options.parent.getOptions();
         }
-        if ((!haveParent && !af_conditionals_1.isUsable.test(this.options.mask)) ||
-            (haveParent && !af_conditionals_1.isUsable.test(this.options.mask) &&
-                !af_conditionals_1.isUsable.test(parentOptions.mask))) {
+        if ((!haveParent && !af_conditionals_1.isUsable(this.options.mask)) ||
+            (haveParent && !af_conditionals_1.isUsable(this.options.mask) &&
+                !af_conditionals_1.isUsable(parentOptions.mask))) {
             throw new TypeError("You must supply a valid options object");
         }
         if (haveParent) {

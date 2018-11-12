@@ -27,10 +27,10 @@ class Property extends eventemitter3_1.EventEmitter {
         this.validated = false;
         this.validating = false;
         this._validateOptions(newOptions);
-        if (!af_conditionals_1.isArray.test(this.normalizers) ||
+        if (!af_conditionals_1.isArray(this.normalizers) ||
             this.normalizers.length === 0)
             this.initDefaultNormalizers();
-        if (!af_conditionals_1.isArray.test(this.validators) ||
+        if (!af_conditionals_1.isArray(this.validators) ||
             this.validators.length === 0)
             this.initDefaultValidators();
         this.value = newValue;
@@ -193,31 +193,31 @@ class Property extends eventemitter3_1.EventEmitter {
         });
     }
     _validateOptions(newOptions) {
-        if (!af_conditionals_1.isUsable.test(newOptions) || !af_conditionals_1.isUsable.test(newOptions.name) ||
-            af_conditionals_1.isEmpty.test(newOptions.name)) {
+        if (!af_conditionals_1.isUsable(newOptions) || !af_conditionals_1.isUsable(newOptions.name) ||
+            af_conditionals_1.isEmpty(newOptions.name)) {
             throw new TypeError("Must supply a valid options object.");
         }
         this.options = newOptions;
         this.options.displayName =
             this.options.displayName || this.options.name;
-        if (!af_conditionals_1.isUsable.test(this.options.invalidIfNotRequiredAndEmpty)) {
+        if (!af_conditionals_1.isUsable(this.options.invalidIfNotRequiredAndEmpty)) {
             this.options.invalidIfNotRequiredAndEmpty =
                 property_defs_1.DEFAULT_INVALID_IF_NOT_REQUIRED_AND_EMPTY;
         }
-        if (!af_conditionals_1.isUsable.test(this.options.normalizeAfterSet)) {
+        if (!af_conditionals_1.isUsable(this.options.normalizeAfterSet)) {
             this.options.normalizeAfterSet = property_defs_1.DEFAULT_NORMALIZE_AFTER_SET;
         }
-        if (!af_conditionals_1.isUsable.test(this.options.normalizeBeforeValidate)) {
+        if (!af_conditionals_1.isUsable(this.options.normalizeBeforeValidate)) {
             this.options.normalizeBeforeValidate =
                 property_defs_1.DEFAULT_NORMALIZE_BEFORE_VALIDATE;
         }
-        if (!af_conditionals_1.isUsable.test(this.options.normalizeIfValid)) {
+        if (!af_conditionals_1.isUsable(this.options.normalizeIfValid)) {
             this.options.normalizeIfValid = property_defs_1.DEFAULT_NORMALIZE_IF_VALID;
         }
-        if (!af_conditionals_1.isUsable.test(this.options.required)) {
+        if (!af_conditionals_1.isUsable(this.options.required)) {
             this.options.required = property_defs_1.DEFAULT_REQUIRED;
         }
-        if (!af_conditionals_1.isUsable.test(this.options.stopValidationOnInvalid)) {
+        if (!af_conditionals_1.isUsable(this.options.stopValidationOnInvalid)) {
             this.options.stopValidationOnInvalid =
                 property_defs_1.DEFAULT_PROPERTY_STOP_VALIDATION_ON_INVALID;
         }
