@@ -28,7 +28,6 @@ import {
 } from "./property-defs";
 import { RequiredValidator, Validator, ValidatorError } from "./validators";
 
-
 export interface PropertyOptions {
     displayName?: string;
     invalidIfNotRequiredAndEmpty?: boolean;

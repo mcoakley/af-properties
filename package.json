@@ -1,24 +1,23 @@
 {
     "name": "af-properties",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "description": "A Properties Framework for managing entity values consistently.",
-    "main": "build/lib/index.js",
+    "main": "dist/lib/index.js",
     "scripts": {
-        "build": "npm test && ./node_modules/.bin/tsc",
+        "dist": "npm test && ./node_modules/.bin/tsc",
         "test": "./node_modules/.bin/nyc ./node_modules/.bin/mocha",
         "coverage": "./node_modules/.bin/nyc report --reporter=text-lcov | coveralls"
     },
+    "files": [
+        "dist"
+    ],
     "nyc": {
+        "include": [
+            "src"
+        ],
         "extension": [
             ".ts",
             ".tsx"
-        ],
-        "exclude": [
-            "**/*.d.ts",
-            "./build/**/*",
-            "./node_modules/**/*",
-            "./reports/**/*",
-            "./test/**/*"
         ],
         "reporter": [
             "html",
@@ -27,14 +26,18 @@
         "all": true,
         "report-dir": "./reports/coverage"
     },
-    "author": "Acme Framework",
+    "author": "Michael Coakley <mcoakley@acmeframework.com>",
     "license": "MIT",
     "repository": {
         "type": "git",
         "url": "https://github.com/acmeframework/af-properties"
     },
+    "bugs": {
+        "url": "https://github.com/acmeframework/af-properties/issues"
+    },
+    "homepage": "https://github.com/acmeframework/af-properties",
     "dependencies": {
-        "af-conditionals": "git+https://github.com/acmeframework/af-conditionals.git",
+        "af-conditionals": "^1.0.0",
         "async-wait-until": "^1.2.4",
         "eventemitter3": "^3.1.0",
         "lodash": "^4.17.11"
@@ -42,19 +45,20 @@
     "devDependencies": {
         "@types/chai": "^4.1.7",
         "@types/chai-as-promised": "^7.1.0",
-        "@types/lodash": "^4.14.118",
-        "@types/mocha": "^5.2.4",
-        "@types/node": "^10.12.5",
-        "@types/sinon": "^5.0.5",
+        "@types/lodash": "^4.14.121",
+        "@types/mocha": "^5.2.6",
+        "@types/node": "^11.9.4",
+        "@types/sinon": "^7.0.6",
         "chai": "^4.2.0",
         "chai-as-promised": "^7.1.1",
         "coveralls": "^3.0.2",
         "mocha": "^5.2.0",
         "mochawesome": "^3.1.1",
-        "nyc": "^12.0.2",
-        "sinon": "^6.3.5",
-        "source-map-support": "^0.5.8",
-        "ts-node": "^7.0.1",
-        "typescript": "^3.1.6"
+        "nyc": "^13.3.0",
+        "sinon": "^7.2.4",
+        "source-map-support": "^0.5.10",
+        "ts-node": "^8.0.2",
+        "tslint": "^5.12.1",
+        "typescript": "^3.3.3"
     }
 }

@@ -4,9 +4,11 @@
 
 [![Build Status](https://travis-ci.org/acmeframework/af-properties.svg?branch=master)](https://travis-ci.org/acmeframework/af-properties)  [![Coverage Status](https://coveralls.io/repos/github/acmeframework/af-properties/badge.svg?branch=master)](https://coveralls.io/github/acmeframework/af-properties?branch=master)
 
-## Note: v0.1.0
+## Installation
 
-This is the initial release version. The code has been thoroughly tested with 100% coverage. However, the packaging is still under development so a NPM module has not been published.
+```bash
+npm install af-properties
+```
 
 ## Description
 
@@ -29,9 +31,15 @@ It does seem a little overkill to put strings in a `Property` or really any valu
 
 ## [Support Issues](https://github.com/acmeframework/af-properties/issues)
 
+## Release Notes
+
+### v1.0.0
+
+This is the initial release version. The code has been thoroughly tested with 100% coverage.
+
 ## The MIT License
 
-Copyright &copy; 2018 Acme Framework
+Copyright &copy; 2019 Acme Framework
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
